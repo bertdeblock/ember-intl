@@ -9,13 +9,9 @@
 
 const { existsSync } = require('node:fs');
 const { dirname, isAbsolute, join } = require('node:path');
-const mergeTrees = require('broccoli-merge-trees');
-const { BroccoliMergeFiles } = require('broccoli-merge-files');
 const stringify = require('json-stable-stringify');
 const calculateCacheKeyForTree = require('calculate-cache-key-for-tree');
 
-const buildTranslationTree = require('./lib/broccoli/build-translation-tree');
-const TranslationReducer = require('./lib/broccoli/translation-reducer');
 const findEngine = require('./lib/utils/find-engine');
 const Logger = require('./lib/logger');
 const DEFAULT_CONFIG = require('./lib/default-config');
@@ -66,12 +62,14 @@ module.exports = {
       wrapTranslationsWithNamespace,
     } = this.configOptions;
 
+    const buildTranslationTree = require('./lib/broccoli/build-translation-tree');
     const [translationTree, addonsWithTranslations] = buildTranslationTree(
       this.project,
       this.configOptions.inputPath,
       this.treeGenerator,
     );
 
+    const TranslationReducer = require('./lib/broccoli/translation-reducer');
     return new TranslationReducer([translationTree], {
       fallbackLocale,
       includeLocales,
@@ -105,6 +103,7 @@ module.exports = {
         },
       });
 
+      const { BroccoliMergeFiles } = require('broccoli-merge-files');
       const flattenedTranslationTree = new BroccoliMergeFiles(
         [translationTree],
         {
@@ -122,6 +121,7 @@ module.exports = {
       trees.push(flattenedTranslationTree);
     }
 
+    const mergeTrees = require('broccoli-merge-trees');
     return this._super.treeForAddon.call(
       this,
       mergeTrees(trees, { overwrite: true }),
@@ -135,6 +135,7 @@ module.exports = {
       trees.push(this.generateTranslationTree());
     }
 
+    const mergeTrees = require('broccoli-merge-trees');
     return mergeTrees(trees, { overwrite: true });
   },
 

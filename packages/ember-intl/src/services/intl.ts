@@ -84,7 +84,7 @@ export default class IntlService extends Service {
 
   private get _localesOrThrow(): Locales {
     assert(
-      'No locales set. Did you call `intl.setLocale()` with one or more locales?',
+      'No locales set. Did you call `intl.setLocale()`?',
       this._locales?.length,
     );
 

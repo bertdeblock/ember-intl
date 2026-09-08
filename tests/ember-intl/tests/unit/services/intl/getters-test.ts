@@ -45,7 +45,7 @@ module('Unit | Service | intl > getters', function (hooks) {
         (error: Error) => {
           return (
             error.message ===
-            'Assertion Failed: No locales set. Did you call `intl.setLocale()` with one or more locales?'
+            'Assertion Failed: No locales set. Did you call `intl.setLocale()`?'
           );
         },
       );
